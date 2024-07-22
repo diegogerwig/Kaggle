@@ -22,8 +22,8 @@ import seaborn as sns
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 import re
 
-train = pd.read_csv('./data/train.csv').drop(['laptop_ID'], axis= 1)
-test = pd.read_csv('./data/test.csv').drop(['laptop_ID'], axis= 1)
+train = pd.read_csv('../data/train.csv').drop(['laptop_ID'], axis= 1)
+test = pd.read_csv('../data/test.csv').drop(['laptop_ID'], axis= 1)
 
 
 class Cleaner(object):
