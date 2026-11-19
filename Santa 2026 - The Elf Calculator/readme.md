@@ -58,7 +58,7 @@ The workshop's calculator performs basic arithmetic operations (`+`, `-`, `*`, `
 | **Allowed Operators** | `"+"` (Addition), `"-"` (Subtraction), `"*"` (Multiplication), `"/"` (Division) |
 | **Division Rule (`/`)** | Must be **exact integer division** (`src1 % src2 == 0`, `src2 != 0`) |
 | **Subtraction Rule (`-`)** | Result must be a **strictly positive integer** (`> 0`) |
-| **Register Value Limits** | Positive integer $\le \text{value\_limit}$ at every intermediate execution step |
+| **Register Value Limits** | Positive integer ≤ `value_limit` at every intermediate execution step |
 | **Instruction Format** | JSON array of 4 elements: `["op", src1, src2, dest]` |
 | **Execution Order** | Sources are read before destination is overwritten (`dest` may equal `src1` or `src2`) |
 | **Success Condition** | Every target number in a puzzle must be present in at least one register during execution |
@@ -74,13 +74,10 @@ Santa 2026 - The Elf Calculator/
 │   ├── __init__.py
 │   ├── simulator.py         # Full Elf Calculator simulator with 100% rule validation
 │   ├── puzzle.py            # Data model parser for puzzles.csv
-│   └── solver/              # Optimization engines (local & protected)
-│       ├── baseline.py      # Baseline double-and-add engine
-│       └── naf_solver.py    # NAF & Dynamic Power Cache solver
+│   └── solver/              # (Excluded by .gitignore) Private optimization solvers
 ├── tests/
 │   └── test_simulator.py    # Unit tests for calculator rules and edge cases
 ├── scripts/
-│   ├── run_solver.py        # Solver runner to generate submission CSVs
 │   └── validate_submission.py # Strict submission verifier
 ├── submissions/             # Generated submission CSVs (Excluded by .gitignore)
 ├── requirements.txt         # Dependencies
@@ -97,21 +94,14 @@ Verifies that all simulator operations, edge cases (inexact division, non-positi
 python -m unittest tests/test_simulator.py
 ```
 
-### 2. Generate a Submission
-Run the solver on all 1,000 puzzles:
-```bash
-# Run optimized NAF & Power Cache solver
-python scripts/run_solver.py --puzzles data/raw/puzzles.csv --output submissions/submission_naf.csv --solver naf
-```
-
-### 3. Strict Pre-Submission Validation
+### 2. Strict Pre-Submission Validation
 Always validate before submitting to Kaggle to guarantee 100% compliance:
 ```bash
-python scripts/validate_submission.py submissions/submission_naf.csv --puzzles data/raw/puzzles.csv
+python scripts/validate_submission.py submissions/submission.csv --puzzles data/raw/puzzles.csv
 ```
 The validator verifies:
 - Exactly two columns: `id,program`
 - All 1,000 IDs (`scored_0001` to `scored_1000`) present without duplicates or omissions
-- UTF-8 byte size $\le 128\text{ KiB}$ per cell
-- Instruction count $\le 4,096$ per puzzle
-- Simulates every instruction to guarantee zero division remainders, positive integers, values $\le \text{value\_limit}$, and 100% target coverage.
+- UTF-8 byte size ≤ 128 KiB per cell
+- Instruction count ≤ 4,096 per puzzle
+- Simulates every instruction to guarantee zero division remainders, positive integers, values ≤ `value_limit`, and 100% target coverage.
