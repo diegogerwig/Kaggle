@@ -7,6 +7,7 @@ import unittest
 from src.simulator import ElfCalculator, SimulationError
 from src.puzzle import Puzzle
 from src.solver.baseline import BaselineSolver
+from src.solver.dag_portfolio_solver import DAGPortfolioSolver
 
 
 class TestElfCalculator(unittest.TestCase):
@@ -67,6 +68,22 @@ class TestElfCalculator(unittest.TestCase):
         calc = ElfCalculator(puzzle.initial_registers, value_limit=puzzle.value_limit)
         is_valid, remaining, error = calc.run_program(instructions, targets=set(puzzle.targets))
         self.assertTrue(is_valid, f"Baseline solver failed simulation: {error}")
+        self.assertEqual(len(remaining), 0)
+
+    def test_dag_portfolio_solver(self):
+        puzzle = Puzzle(
+            id="test_dag_0001",
+            starting_values=[631, 889, 1205, 1563],
+            targets=[1, 2, 1024, 1563, 100855253734114, 125045864139519],
+            value_limit=1445817928925762
+        )
+        solver = DAGPortfolioSolver(puzzle)
+        instructions = solver.solve()
+
+        self.assertGreater(len(instructions), 0)
+        calc = ElfCalculator(puzzle.initial_registers, value_limit=puzzle.value_limit)
+        is_valid, remaining, error = calc.run_program(instructions, targets=set(puzzle.targets))
+        self.assertTrue(is_valid, f"DAGPortfolioSolver failed simulation: {error}")
         self.assertEqual(len(remaining), 0)
 
 
