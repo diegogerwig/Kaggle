@@ -1,0 +1,28 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Kaggle Datasets (never share competition data)
+data/
+*.csv
+
+# Competitor Protection (Confidential Solutions & Solvers)
+submissions/
+notebooks/
+src/solver/
+scripts/run_solver.py
+
+# IDE & OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
